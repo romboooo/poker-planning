@@ -6,6 +6,7 @@
 	<meta name="theme-color" content="#111420">
 	<meta name="description" content="Покер-планирование задач.">
 	<title>Покер-планирование</title>
+	<link rel="icon" href="./favicon.ico" sizes="any">
 	<link rel="stylesheet" href="./app.css">
 	<script src="./app.js" defer></script>
 </head>
@@ -47,12 +48,14 @@
 		<div class="pp-room-top">
 			<div><div class="pp-eyebrow" id="pp-round-label">Раунд 1</div><h1 id="pp-room-name">Планирование</h1></div>
 			<div class="pp-room-actions">
+				<button class="pp-button pp-button-secondary pp-code-button" id="pp-copy-code" type="button" aria-label="Скопировать код комнаты"><span id="pp-room-code">------</span><span class="pp-copy-mark" aria-hidden="true">⧉</span></button>
 				<button class="pp-button pp-button-light" id="pp-copy-link" type="button">Пригласить <span aria-hidden="true">↗</span></button>
-				<button class="pp-icon-button" id="pp-leave" type="button" aria-label="Выйти из комнаты" title="Выйти">×</button>
+				<button class="pp-icon-button" id="pp-leave" type="button" aria-label="Выйти из комнаты" title="Выйти">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>
+				</button>
 			</div>
 		</div>
 
-		<div class="pp-room-code-row"><span class="pp-live-dot"></span><span>Код комнаты</span><strong id="pp-room-code"></strong><button id="pp-copy-code" type="button">Копировать</button></div>
 		<form class="pp-panel pp-task-panel" id="pp-task-form">
 			<div class="pp-task-form-row">
 				<label for="pp-task-url">Ссылка на текущую задачу<input id="pp-task-url" name="task_url" type="url" maxlength="2048" inputmode="url" placeholder="https://…" autocomplete="url"></label>
@@ -98,6 +101,16 @@
 
 	<div class="pp-toast" id="pp-toast" role="status" aria-live="polite"></div>
 	<div class="pp-error" id="pp-error" role="alert" hidden></div>
+	<div class="pp-modal" id="pp-leave-dialog" hidden>
+		<section class="pp-dialog" role="dialog" aria-modal="true" aria-labelledby="pp-leave-title" aria-describedby="pp-leave-description">
+			<h2 id="pp-leave-title">Выйти из комнаты?</h2>
+			<p id="pp-leave-description">Вы выйдете из комнаты на этом устройстве.</p>
+			<div class="pp-dialog-actions">
+				<button class="pp-button pp-button-secondary" id="pp-leave-cancel" type="button">Остаться</button>
+				<button class="pp-button pp-button-danger" id="pp-leave-confirm" type="button">Выйти</button>
+			</div>
+		</section>
+	</div>
 </main>
 </body>
 </html>
