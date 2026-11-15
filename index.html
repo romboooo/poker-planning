@@ -4,8 +4,8 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#111420">
-	<meta name="description" content="Планирование задач командой с одновременным вскрытием оценок.">
-	<title>Planning Poker — оценка задач командой</title>
+	<meta name="description" content="Покер-планирование задач.">
+	<title>Покер-планирование</title>
 	<link rel="stylesheet" href="./app.css">
 	<script src="./app.js" defer></script>
 </head>
@@ -14,14 +14,12 @@
 	<header class="pp-header">
 		<a class="pp-brand" href="./" aria-label="Покер планирования — главная">
 			<span class="pp-brand-mark" aria-hidden="true">♠</span>
-			<span>Planning Poker</span>
+			<span>Покер-планирование</span>
 		</a>
 	</header>
 
 	<section class="pp-intro" id="pp-home">
-		<div class="pp-eyebrow">Оценка задач командой</div>
-		<h1>Договоритесь об оценке<br><span>вместе</span></h1>
-		<p class="pp-lead">Создайте комнату, пригласите команду и откройте карты одновременно.</p>
+		<h1>Покер-планирование</h1>
 		<div class="pp-forms">
 			<form class="pp-panel" id="pp-create-form">
 				<div class="pp-panel-heading">
@@ -43,7 +41,6 @@
 				<button class="pp-button pp-button-secondary" type="submit">Присоединиться <span aria-hidden="true">→</span></button>
 			</form>
 		</div>
-		<div class="pp-footnote"><span>✓</span> Никаких аккаунтов и установки приложений</div>
 	</section>
 
 	<section class="pp-room" id="pp-room" hidden>
@@ -56,6 +53,13 @@
 		</div>
 
 		<div class="pp-room-code-row"><span class="pp-live-dot"></span><span>Код комнаты</span><strong id="pp-room-code"></strong><button id="pp-copy-code" type="button">Копировать</button></div>
+		<form class="pp-panel pp-task-panel" id="pp-task-form">
+			<div class="pp-task-form-row">
+				<label for="pp-task-url">Ссылка на текущую задачу<input id="pp-task-url" name="task_url" type="url" maxlength="2048" inputmode="url" placeholder="https://…" autocomplete="url"></label>
+				<button class="pp-button pp-button-primary" id="pp-task-save" type="submit">Сохранить ссылку</button>
+			</div>
+			<a class="pp-task-link" id="pp-task-open" target="_blank" rel="noopener noreferrer" hidden>Открыть задачу <span aria-hidden="true">↗</span></a>
+		</form>
 		<div class="pp-room-grid">
 			<section class="pp-panel pp-votes-panel">
 				<div class="pp-panel-heading pp-panel-heading-spread">
