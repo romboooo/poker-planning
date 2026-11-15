@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ru">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#111420">
+	<meta name="description" content="Планирование задач командой с одновременным вскрытием оценок.">
+	<title>Planning Poker — оценка задач командой</title>
+	<link rel="stylesheet" href="./app.css">
+	<script src="./app.js" defer></script>
+</head>
+<body>
+<main class="pp-app" id="poker-planning-app" data-pp-theme="dark">
+	<header class="pp-header">
+		<a class="pp-brand" href="./" aria-label="Покер планирования — главная">
+			<span class="pp-brand-mark" aria-hidden="true">♠</span>
+			<span>Planning Poker</span>
+		</a>
+	</header>
+
+	<section class="pp-intro" id="pp-home">
+		<div class="pp-eyebrow">Оценка задач командой</div>
+		<h1>Договоритесь об оценке<br><span>вместе</span></h1>
+		<p class="pp-lead">Создайте комнату, пригласите команду и откройте карты одновременно.</p>
+		<div class="pp-forms">
+			<form class="pp-panel" id="pp-create-form">
+				<div class="pp-panel-heading">
+					<span class="pp-step">01</span>
+					<div><h2>Новая комната</h2><p>Вы станете ведущим раунда</p></div>
+				</div>
+				<label>Название раунда<input name="room_name" maxlength="80" placeholder="Например, Спринт 42"></label>
+				<label>Ваше имя<input name="name" maxlength="40" autocomplete="name" placeholder="Как к вам обращаться?" required></label>
+				<button class="pp-button pp-button-primary" type="submit">Создать комнату <span aria-hidden="true">→</span></button>
+			</form>
+
+			<form class="pp-panel" id="pp-join-form">
+				<div class="pp-panel-heading">
+					<span class="pp-step">02</span>
+					<div><h2>Войти в комнату</h2><p>Попросите ссылку или код у ведущего</p></div>
+				</div>
+				<label>Код комнаты<input name="room" maxlength="6" autocapitalize="characters" placeholder="Например, K7M4PQ" required></label>
+				<label>Ваше имя<input name="name" maxlength="40" autocomplete="name" placeholder="Как к вам обращаться?" required></label>
+				<button class="pp-button pp-button-secondary" type="submit">Присоединиться <span aria-hidden="true">→</span></button>
+			</form>
+		</div>
+		<div class="pp-footnote"><span>✓</span> Никаких аккаунтов и установки приложений</div>
+	</section>
+
+	<section class="pp-room" id="pp-room" hidden>
+		<div class="pp-room-top">
+			<div><div class="pp-eyebrow" id="pp-round-label">Раунд 1</div><h1 id="pp-room-name">Планирование</h1></div>
+			<div class="pp-room-actions">
+				<button class="pp-button pp-button-light" id="pp-copy-link" type="button">Пригласить <span aria-hidden="true">↗</span></button>
+				<button class="pp-icon-button" id="pp-leave" type="button" aria-label="Выйти из комнаты" title="Выйти">×</button>
+			</div>
+		</div>
+
+		<div class="pp-room-code-row"><span class="pp-live-dot"></span><span>Код комнаты</span><strong id="pp-room-code"></strong><button id="pp-copy-code" type="button">Копировать</button></div>
+		<div class="pp-room-grid">
+			<section class="pp-panel pp-votes-panel">
+				<div class="pp-panel-heading pp-panel-heading-spread">
+					<div><h2>Участники <span class="pp-count" id="pp-player-count">0</span></h2><p id="pp-vote-progress">Подключаем команду…</p></div>
+					<div class="pp-host-pill" id="pp-host-pill" hidden>Вы ведущий</div>
+				</div>
+				<div class="pp-table-shell">
+					<div class="pp-poker-table">
+						<div class="pp-table-center">
+							<div class="pp-table-suits" aria-hidden="true">♠　♥　♦　♣</div>
+							<div class="pp-table-round" id="pp-table-round">Раунд 1</div>
+							<strong id="pp-table-status">Карты закрыты</strong>
+							<div class="pp-countdown" id="pp-countdown" aria-live="polite" hidden></div>
+							<small id="pp-table-hint">Все оценки откроются одновременно</small>
+						</div>
+						<div class="pp-player-list" id="pp-player-list"></div>
+					</div>
+				</div>
+				<div class="pp-result" id="pp-result" hidden>
+					<div><span>Среднее</span><strong id="pp-average">—</strong><small>часа</small></div>
+					<div><span>Самое частое</span><strong id="pp-mode">—</strong><small id="pp-mode-caption">значение</small></div>
+				</div>
+				<div class="pp-room-controls" id="pp-room-controls" hidden>
+					<button class="pp-button pp-button-primary" id="pp-reveal" type="button">Открыть карты</button>
+					<button class="pp-button pp-button-secondary" id="pp-reset" type="button" hidden>Новый раунд</button>
+				</div>
+			</section>
+
+			<aside class="pp-panel pp-deck-panel">
+				<div class="pp-panel-heading"><span class="pp-step">🂠</span><div><h2>Ваша оценка</h2><p id="pp-deck-hint">Выберите часы — ответ увидят после вскрытия</p></div></div>
+				<div class="pp-deck" id="pp-deck"></div>
+				<div class="pp-deck-caption">Оценка задачи в часах</div>
+			</aside>
+		</div>
+	</section>
+
+	<div class="pp-toast" id="pp-toast" role="status" aria-live="polite"></div>
+	<div class="pp-error" id="pp-error" role="alert" hidden></div>
+</main>
+</body>
+</html>
