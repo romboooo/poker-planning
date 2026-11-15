@@ -173,6 +173,19 @@
 		current.selected = state.my_vote === null ? null : Number(state.my_vote);
 		document.getElementById('pp-room-name').textContent = state.name;
 		document.getElementById('pp-round-label').textContent = 'Раунд ' + state.round;
+		const taskUrl = String(state.task_url || '');
+		const taskInput = document.getElementById('pp-task-url');
+		if (document.activeElement !== taskInput) taskInput.value = taskUrl;
+		taskInput.disabled = !!state.revealed;
+		document.getElementById('pp-task-save').disabled = !!state.revealed;
+		const taskLink = document.getElementById('pp-task-open');
+		if (taskUrl) {
+			taskLink.href = taskUrl;
+			taskLink.hidden = false;
+		} else {
+			taskLink.removeAttribute('href');
+			taskLink.hidden = true;
+		}
 		document.getElementById('pp-room-code').textContent = state.code;
 		document.getElementById('pp-player-count').textContent = state.players.length;
 		document.getElementById('pp-host-pill').hidden = !state.is_host;
@@ -181,7 +194,7 @@
 		document.getElementById('pp-reset').hidden = !state.revealed;
 		document.getElementById('pp-deck-hint').textContent = state.revealed
 			? 'Карты открыты. Ведущий может начать новый раунд.'
-			: 'Выберите часы — ответ увидят после вскрытия';
+			: 'Выберите часы. Нажмите выбранную карту ещё раз, чтобы снять голос.';
 
 		const votedCount = state.players.filter(function (player) { return player.voted; }).length;
 		document.getElementById('pp-vote-progress').textContent = state.revealed
@@ -255,7 +268,9 @@
 
 		const selected = current.selected;
 		Array.from(deckRoot.children).forEach(function (button) {
-			button.classList.toggle('is-selected', Number(button.dataset.value) === selected);
+			const isSelected = Number(button.dataset.value) === selected;
+			button.classList.toggle('is-selected', isSelected);
+			button.setAttribute('aria-pressed', String(isSelected));
 			button.disabled = !!state.revealed;
 		});
 	}
@@ -282,8 +297,9 @@
 			button.addEventListener('click', async function () {
 				if (!current) return;
 				try {
-					const result = await request('vote', { vote: value });
-					current.selected = value;
+					const nextVote = current.selected === value ? null : value;
+					const result = await request('vote', { vote: nextVote });
+					current.selected = nextVote;
 					render(result.state);
 					setError('');
 				} catch (error) {
@@ -320,6 +336,20 @@
 				member_secret: saved && saved.secret
 			});
 			openRoom(room, result.member, form.get('name'), result.state);
+		} catch (error) {
+			setError(error.message);
+		}
+	});
+
+	document.getElementById('pp-task-form').addEventListener('submit', async function (event) {
+		event.preventDefault();
+		if (!current) return;
+		const taskUrl = document.getElementById('pp-task-url').value.trim();
+		try {
+			const result = await request('set_task_url', { task_url: taskUrl });
+			render(result.state);
+			setError('');
+			showToast(taskUrl ? 'Ссылка на задачу сохранена' : 'Ссылка удалена');
 		} catch (error) {
 			setError(error.message);
 		}
