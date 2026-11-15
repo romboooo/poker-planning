@@ -187,6 +187,7 @@
 			taskLink.hidden = true;
 		}
 		document.getElementById('pp-room-code').textContent = state.code;
+		document.getElementById('pp-copy-code').setAttribute('aria-label', 'Скопировать код комнаты ' + state.code);
 		document.getElementById('pp-player-count').textContent = state.players.length;
 		document.getElementById('pp-host-pill').hidden = !state.is_host;
 		document.getElementById('pp-room-controls').hidden = !state.is_host;
@@ -394,7 +395,41 @@
 		}
 	});
 
-	document.getElementById('pp-leave').addEventListener('click', function () {
+	const leaveButton = document.getElementById('pp-leave');
+	const leaveDialog = document.getElementById('pp-leave-dialog');
+	const leaveCancel = document.getElementById('pp-leave-cancel');
+	const leaveConfirm = document.getElementById('pp-leave-confirm');
+
+	function closeLeaveDialog() {
+		leaveDialog.hidden = true;
+		leaveButton.focus();
+	}
+
+	leaveButton.addEventListener('click', function () {
+		leaveDialog.hidden = false;
+		leaveCancel.focus();
+	});
+	leaveCancel.addEventListener('click', closeLeaveDialog);
+	leaveDialog.addEventListener('click', function (event) {
+		if (event.target === leaveDialog) closeLeaveDialog();
+	});
+	document.addEventListener('keydown', function (event) {
+		if (leaveDialog.hidden) return;
+		if (event.key === 'Escape') {
+			event.preventDefault();
+			closeLeaveDialog();
+		} else if (event.key === 'Tab') {
+			if (event.shiftKey && document.activeElement === leaveCancel) {
+				event.preventDefault();
+				leaveConfirm.focus();
+			} else if (!event.shiftKey && document.activeElement === leaveConfirm) {
+				event.preventDefault();
+				leaveCancel.focus();
+			}
+		}
+	});
+	leaveConfirm.addEventListener('click', function () {
+		leaveDialog.hidden = true;
 		if (pollTimer) window.clearInterval(pollTimer);
 		pollTimer = null;
 		stopCountdown();
