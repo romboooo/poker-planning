@@ -1,0 +1,6 @@
+.env
+.env.*
+!*.example
+node_modules/
+rooms-export.json
+backend/rooms-export.json

@@ -45,7 +45,8 @@
 		});
 	}
 
-	const apiUrl = new URL('https://poker-planning.fabledbull515.chatgpt.site/api/poker');
+	const apiSetting = document.querySelector('meta[name="poker-api-url"]');
+	const apiUrl = new URL(apiSetting && apiSetting.content ? apiSetting.content : '/api/poker', window.location.href);
 
 	function setError(message) {
 		errorBox.textContent = message || '';

@@ -1,0 +1,16 @@
+{
+  "name": "poker-planning-timeweb",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Planning Poker frontend and API for Timeweb App Platform",
+  "scripts": {
+    "start": "node backend/server.js",
+    "import-rooms": "node backend/import-rooms.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "pg": "^8.16.3"
+  }
+}
